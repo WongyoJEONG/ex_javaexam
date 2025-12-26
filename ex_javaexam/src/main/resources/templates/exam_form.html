@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Java 시험 응시</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; padding: 20px; }
+        .container { width: 600px; margin: 0 auto; border: 1px solid #ccc; padding: 20px; border-radius: 10px; }
+        .form-group { margin-bottom: 15px; }
+        label { font-weight: bold; display: block; margin-bottom: 5px; }
+        input[type="text"], input[type="email"], input[type="password"] { width: 100%; padding: 8px; box-sizing: border-box; }
+        .question { margin-top: 20px; margin-bottom: 10px; font-weight: bold; background-color: #f9f9f9; padding: 10px; }
+        .error-msg { color: red; font-weight: bold; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>[Java 시험]</h2>
+
+    <div th:if="${msg}" class="error-msg" th:text="${msg}"></div>
+
+    <form action="/exam/submit" method="post" th:object="${examDto}" onsubmit="return checkForm()">
+
+        <h3>응시자 정보</h3>
+        <div class="form-group">
+            <label for="name">이름:</label>
+            <input type="text" id="name" th:field="*{name}" placeholder="이름을 입력하세요">
+        </div>
+        <div class="form-group">
+            <label for="email">이메일:</label>
+            <input type="email" id="email" th:field="*{email}" placeholder="이메일을 입력하세요">
+        </div>
+        <div class="form-group">
+            <label for="password">비밀번호:</label>
+            <input type="password" id="password" th:field="*{password}" placeholder="비밀번호를 입력하세요">
+        </div>
+
+        <hr>
+
+        <h3>시험 문제</h3>
+
+        <div class="question">1번. Java에서 문자열(String) 내용 비교로 올바른 것은?</div>
+        <label><input type="radio" th:field="*{ans1}" value="1"> ① == </label><br>
+        <label><input type="radio" th:field="*{ans1}" value="2"> ② equals() </label><br>
+        <label><input type="radio" th:field="*{ans1}" value="3"> ③ compareTo() </label><br>
+        <label><input type="radio" th:field="*{ans1}" value="4"> ④ != </label><br>
+
+        <div class="question">2번. 오버로딩에 대한 설명으로 옳은 것은?</div>
+        <label><input type="radio" th:field="*{ans2}" value="1"> ① 반환 타입만 다르면 오버로딩이 된다.</label><br>
+        <label><input type="radio" th:field="*{ans2}" value="2"> ② 접근 제어자가 같아야만 오버로딩이 된다.</label><br>
+        <label><input type="radio" th:field="*{ans2}" value="3"> ③ 메서드 이름이 같고 매개변수 목록이 다르면 오버로딩이다.</label><br>
+        <label><input type="radio" th:field="*{ans2}" value="4"> ④ static 메서드만 오버로딩할 수 있다.</label><br>
+
+        <div class="question">3번. 배열 길이를 얻는 올바른 코드는?</div>
+        <label><input type="radio" th:field="*{ans3}" value="1"> ① arr.length </label><br>
+        <label><input type="radio" th:field="*{ans3}" value="2"> ② arr.size() </label><br>
+        <label><input type="radio" th:field="*{ans3}" value="3"> ③ arr.length() </label><br>
+        <label><input type="radio" th:field="*{ans3}" value="4"> ④ arr.getLength() </label><br>
+
+        <div class="question">4번. Java에서 클래스를 상속받을 때 사용하는 키워드는?</div>
+        <input type="text" th:field="*{ans4}" placeholder="답을 입력하세요">
+
+        <div class="question">5번. 예외가 발생할 가능성이 있는 코드를 감싸서 예외를 처리할 때 사용하는 키워드는?</div>
+        <input type="text" th:field="*{ans5}" placeholder="답을 입력하세요">
+
+        <br><br>
+        <button type="submit" style="width: 100%; padding: 10px; background-color: #4CAF50; color: white; border: none; font-size: 16px; cursor: pointer;">제출</button>
+    </form>
+</div>
+
+<script>
+    // 유효성 검사 함수
+    function checkForm() {
+        // 1. 개인정보 체크
+        let name = document.getElementById("name").value;
+        let email = document.getElementById("email").value;
+        let pw = document.getElementById("password").value;
+
+        if (name.trim() === "") { alert("이름을 입력해주세요."); return false; }
+        if (email.trim() === "") { alert("이메일을 입력해주세요."); return false; }
+        if (pw.trim() === "") { alert("비밀번호를 입력해주세요."); return false; }
+
+        // 2. 객관식 문제 체크 (라디오 버튼)
+        // name 속성은 Thymeleaf에 의해 ans1, ans2, ans3 등으로 생성됩니다.
+        if (!document.querySelector('input[name="ans1"]:checked')) { alert("1번 문제를 풀어주세요."); return false; }
+        if (!document.querySelector('input[name="ans2"]:checked')) { alert("2번 문제를 풀어주세요."); return false; }
+        if (!document.querySelector('input[name="ans3"]:checked')) { alert("3번 문제를 풀어주세요."); return false; }
+
+        // 3. 주관식 문제 체크 (텍스트)
+        // id는 Thymeleaf field와 동일하게 생성됩니다.
+        let ans4 = document.getElementById("ans4").value;
+        let ans5 = document.getElementById("ans5").value;
+
+        if (ans4.trim() === "") { alert("4번 문제를 풀어주세요."); return false; }
+        if (ans5.trim() === "") { alert("5번 문제를 풀어주세요."); return false; }
+
+        return true; // 모두 통과 시 전송
+    }
+</script>
+
+</body>
+</html>

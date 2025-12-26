@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>응시정보 삭제</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; text-align: center; padding: 50px; }
+        .container { width: 400px; margin: 0 auto; border: 1px solid #ccc; padding: 20px; border-radius: 10px; }
+        .info { margin-bottom: 20px; text-align: left; background-color: #f9f9f9; padding: 10px;}
+        .error { color: red; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>[응시정보 삭제]</h2>
+
+    <div class="info">
+        <p><strong>이름:</strong> <span th:text="${exam.name}"></span></p>
+        <p><strong>이메일:</strong> <span th:text="${exam.email}"></span></p>
+        <p><strong>응시날짜:</strong> <span th:text="${#temporals.format(exam.examDate, 'yy.MM.dd HH:mm:ss')}"></span></p>
+    </div>
+
+    <div th:if="${msg}" class="error" th:text="${msg}"></div>
+
+    <form action="/delete" method="post">
+        <input type="hidden" name="id" th:value="${exam.id}">
+
+        <label>비밀번호 입력: </label>
+        <input type="password" name="password" required>
+
+        <br><br>
+        <button type="submit" style="background-color: red; color: white; border: none; padding: 5px 15px; cursor: pointer;">삭제</button>
+        <a href="/result" style="margin-left: 10px;">취소</a>
+    </form>
+</div>
+
+</body>
+</html>

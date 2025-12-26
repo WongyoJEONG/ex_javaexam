@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>시험 결과</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; text-align: center; padding: 20px; }
+        table { margin: 0 auto; border-collapse: collapse; width: 80%; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background-color: #f2f2f2; }
+        .sort-menu { margin-bottom: 20px; }
+        .sort-menu a { margin: 0 10px; text-decoration: none; color: blue; font-weight: bold; }
+        .btn-delete { color: red; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<h2>[Java 시험 응시 결과]</h2>
+
+<div class="sort-menu">
+    <a href="/result?sort=date">응시일순</a> |
+    <a href="/result?sort=name">이름순</a> |
+    <a href="/result?sort=score">성적순</a>
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th>이름</th>
+        <th>이메일</th>
+        <th>1번</th>
+        <th>2번</th>
+        <th>3번</th>
+        <th>4번</th>
+        <th>5번</th>
+        <th>점수</th>
+        <th>응시일</th>
+        <th>결과</th>
+        <th>삭제</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="exam : ${list}">
+        <td th:text="${exam.name}">홍길동</td>
+        <td th:text="${exam.email}">hong@test.com</td>
+        <td th:text="${exam.ans1}">1</td>
+        <td th:text="${exam.ans2}">2</td>
+        <td th:text="${exam.ans3}">3</td>
+        <td th:text="${exam.ans4}">답</td>
+        <td th:text="${exam.ans5}">답</td>
+        <td th:text="${exam.score}">100</td>
+        <td th:text="${#temporals.format(exam.examDate, 'yy.MM.dd HH:mm:ss')}"></td>
+        <td th:text="${exam.score >= 70 ? 'Pass' : 'Fail'}"
+            th:style="${exam.score >= 70 ? 'color:blue' : 'color:red'}">Pass</td>
+        <td>
+            <a th:href="@{/delete/{id}(id=${exam.id})}" class="btn-delete">X</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<br>
+<a href="/">메인으로 돌아가기</a>
+
+</body>
+</html>
